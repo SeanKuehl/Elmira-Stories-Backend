@@ -32,8 +32,8 @@ mongoose.connect(process.env.MONGO_URI, {
     console.log(error);
   });
 
-//schema for memorial trees. This is also used for memorial benches as well
-const MemorialTreeSchema = new mongoose.Schema({
+//schema for memorials. This included memorial trees and benches
+const MemorialSchema = new mongoose.Schema({
     memorial_ID: {
         type: String,
         required: true,
@@ -64,14 +64,14 @@ const MemorialTreeSchema = new mongoose.Schema({
         type: String,   //if there is something special of note or a story associated with the tree, otherwise N/A
         
     },
-    tree_image: {
+    memorial_image: {
         type: String,   
         required: true,
     }
 
 });
-const Tree = mongoose.model('memorial_trees', MemorialTreeSchema);
-Tree.createIndexes();
+const Memorial = mongoose.model('memorial_trees', MemorialSchema);
+Memorial.createIndexes();
 
 // For backend and express
 const express = require('express');
@@ -110,26 +110,26 @@ app.get("/", (req, resp) => {
     // backend working properly
 });
 
-app.post("/register_new_memorial_tree", async (req, resp) => {
+app.post("/register_new_memorial", async (req, resp) => {
     try {
         
-        const new_tree = new Tree({
+        const new_memorial = new Memorial({
             memorial_ID: req.body.memorialId,
             dedicated_to: req.body.dedicatedTo,
-            dedicated_by: isEmpty(req.body.dedicatedBy) ? "Lions Club of Elmira": req.body.dedicatedBy,
+            dedicated_by: isEmpty(req.body.dedicatedBy) ? "Elmira Lions Club": req.body.dedicatedBy,
             //date added has a good default, so no real need to pass it here
             approximate_location: req.body.approximateLocation,
             side_of_trail: isEmpty(req.body.sideOfTrail) ? "N/A": req.body.sideOfTrail,
             additional_description: isEmpty(req.body.additionalDescription) ? "N/A": req.body.additionalDescription,
-            tree_image: req.body.image,
+            memorial_image: req.body.image,
         });
-        let result = await new_tree.save();
+        let result = await new_memorial.save();
         result = result.toObject();
         if (result) {
             resp.send(req.body);
             console.log(result);
         } else {
-            console.log("Tree already registered");
+            console.log("Memorial already registered");
         }
 
     } catch (e) {
@@ -138,7 +138,7 @@ app.post("/register_new_memorial_tree", async (req, resp) => {
 });
 
 
-app.get('/get_tree_image/:imageName', async (req, res) => {
+app.get('/get_memorial_image/:imageName', async (req, res) => {
     
     const s3 = new S3({
         credentials: {
@@ -161,14 +161,15 @@ app.get('/get_tree_image/:imageName', async (req, res) => {
 });
 
 
-app.get('/get_trees_by_search_term/:searchTerm', async (req, res) => {
+app.get('/get_memorial_by_search_term/:searchTerm', async (req, res) => {
     //check if the search term is empty/null. If this is the case, return all
     //if the search term isn't empty, search with it and return results
 
     //this is the 'super secret' key that means the user didn't enter anything and we should return all entries
+    //if someone manages to enter this in by pure chance, I will have already won the lottery six times in a row and be too rich to worry about it
     if (req.params.searchTerm !== "Dan Kuso The GOAT"){
         //search with it
-        const results = await Tree.find({
+        const results = await Memorial.find({
             $or: [  //search the following fields non-exclusively
                 {dedicated_to: { "$regex": req.params.searchTerm, "$options": "i" }},  //this will search the field for entries that contain the search term
                 {dedicated_by: { "$regex": req.params.searchTerm, "$options": "i" }},
@@ -180,7 +181,7 @@ app.get('/get_trees_by_search_term/:searchTerm', async (req, res) => {
     }
     else {
         //search all
-        const results = await Tree.find({})
+        const results = await Memorial.find({})
 
         res.send(results);
     }
