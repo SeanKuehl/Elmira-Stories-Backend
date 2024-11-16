@@ -22,11 +22,12 @@ const limiter = RateLimit({
 
 // To connect with your mongoDB database
 const mongoose = require('mongoose');
-await mongoose.connect(process.env.MONGO_URI, {
+mongoose.connect(process.env.MONGO_URI, {
     dbName: 'ElmiraStories-DB',
 }) 
   .then((res) => {
     console.log("Database connected");
+    app.listen(5000);
   })
   .catch((error) => {
     console.log(error);
@@ -71,7 +72,7 @@ const MemorialSchema = new mongoose.Schema({
 
 });
 const Memorial = mongoose.model('memorial_trees', MemorialSchema);
-Memorial.createIndexes();
+//Memorial.createIndexes();
 
 // For backend and express
 const express = require('express');
@@ -194,4 +195,4 @@ app.get('/get_memorial_by_search_term/:searchTerm', async (req, res) => {
 
 
 
-app.listen(5000);
+
