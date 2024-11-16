@@ -22,7 +22,7 @@ const limiter = RateLimit({
 
 // To connect with your mongoDB database
 const mongoose = require('mongoose');
-mongoose.connect(process.env.MONGO_URI, {
+await mongoose.connect(process.env.MONGO_URI, {
     dbName: 'ElmiraStories-DB',
 }) 
   .then((res) => {
