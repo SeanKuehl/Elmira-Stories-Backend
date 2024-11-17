@@ -83,6 +83,9 @@ app.use(compression()); // Compress all routes
 app.use(helmet());
 app.use(limiter);
 app.use(express.json());
+app.use('*', corse());
+
+/*
 app.use(cors({
     
     origin: "https://elmira-stories-production.up.railway.app",    //will need to set this to the domain of the web app in production
@@ -91,6 +94,7 @@ app.use(cors({
     optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'device-remember-token', 'Origin', 'Accept', 'Access-Control-Allow-Origin: https://elmira-stories-production.up.railway.app']
 }));    
+*/
 
 function isEmpty(value){
     if (value !== "" && value !== " " && value != null && value != undefined) {
