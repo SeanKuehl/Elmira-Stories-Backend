@@ -163,6 +163,7 @@ app.get('/get_memorial_image/:imageName', async (req, res) => {
 
 
 app.get('/get_memorial_by_search_term/:searchTerm', async (req, res) => {
+    console.log("request recieved");
     //check if the search term is empty/null. If this is the case, return all
     //if the search term isn't empty, search with it and return results
 
