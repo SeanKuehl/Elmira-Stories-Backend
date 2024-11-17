@@ -86,10 +86,10 @@ app.use(express.json());
 app.use(cors({
     
     origin: "*",    //will need to set this to the domain of the web app in production
-    methods: ['GET', 'POST', ],
+    methods: ['GET', 'POST', 'OPTIONS'],
     credentials: true, //Credentials are cookies, authorization headers or TLS client certificates.
     optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'device-remember-token', 'Origin', 'Accept']
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'device-remember-token', 'Origin', 'Accept', 'Access-Control-Allow-Origin: *']
 }));    
 
 function isEmpty(value){
