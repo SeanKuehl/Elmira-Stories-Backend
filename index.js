@@ -83,7 +83,13 @@ app.use(compression()); // Compress all routes
 app.use(helmet());
 app.use(limiter);
 app.use(express.json());
-app.use('*', cors());
+//app.use('*', cors());
+
+app.use(cors({
+    origin: true,
+    credentials: true, //Credentials are cookies, authorization headers or TLS client certificates.
+    
+}));  
 
 /*
 app.use(cors({
