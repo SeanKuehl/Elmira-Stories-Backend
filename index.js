@@ -28,6 +28,7 @@ mongoose.connect(process.env.MONGO_URI, {
   .then((res) => {
     console.log("Database connected");
     app.listen(5000, "::"); //this is to make it IPV6 for the Railway private network and reverse proxying
+    
   })
   .catch((error) => {
     console.log(error);
@@ -86,11 +87,12 @@ app.use(express.json());
 
 app.use(cors({
     
-    origin: "https://elmira-stories-production.up.railway.app:8080",    //will need to set this to the domain of the web app in production
+    origin: process.env.ALLOWED_ORIGIN,    //will need to set this to the domain of the web app in production
     methods: ['GET', 'POST', 'OPTIONS'],
     credentials: true, //Credentials are cookies, authorization headers or TLS client certificates.
     optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'device-remember-token', 'Origin', 'Accept', 'Access-Control-Allow-Origin: https://elmira-stories-production.up.railway.app:8080']
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'device-remember-token', 'Origin', 'Accept']    
+    // for prod: allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'device-remember-token', 'Origin', 'Accept', 'Access-Control-Allow-Origin: '+process.env.ALLOWED_ORIGIN]  
 }));    
 
 
