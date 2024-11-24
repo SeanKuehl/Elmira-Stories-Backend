@@ -54,7 +54,7 @@ app.use(cors({
     methods: ['GET', 'POST', 'OPTIONS'],
     credentials: true, //Credentials are cookies, authorization headers or TLS client certificates.
     optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'device-remember-token', 'Origin', 'Accept']    
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'device-remember-token', 'Origin', 'Accept', 'Access-Control-Allow-Origin: '+process.env.ALLOWED_ORIGIN]    
     // for prod: allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'device-remember-token', 'Origin', 'Accept', 'Access-Control-Allow-Origin: '+process.env.ALLOWED_ORIGIN]  
 }));    
 
