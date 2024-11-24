@@ -48,6 +48,8 @@ app.use(helmet());
 app.use(limiter);
 app.use(express.json());
 
+app.set('trust proxy', 'loopback');
+
 app.use(cors({
     
     origin: process.env.ALLOWED_ORIGIN,    //will need to set this to the domain of the web app in production
